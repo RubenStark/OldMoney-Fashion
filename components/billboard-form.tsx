@@ -1,6 +1,6 @@
 "use client";
 
-import { Store } from "@prisma/client";
+import { Billboard, Store } from "@prisma/client";
 import { Heading } from "./ui/heading";
 import { Button } from "./ui/button";
 import { Trash } from "lucide-react";
@@ -18,33 +18,44 @@ import AlertModal from "./modals/alert-modal";
 import { ApiAlert } from "./ui/api-alert";
 import { useOrigin } from "@/hooks/use-origin";
 
-interface SettingsFormProps {
-  initialData: Store;
+interface BillboardFormProps {
+  initialData: Billboard | null;
 }
 
 const formSchema = z.object({
-  name: z.string().min(1),
+  label: z.string().min(1),
+  imageUrl: z.string().min(1),
 });
 
-type SettingsFormValues = z.infer<typeof formSchema>;
+type BillboardFormValues = z.infer<typeof formSchema>;
 
-function SettingsForm(props: Readonly<SettingsFormProps>) {
+function BillboardForm(props: BillboardFormProps) {
   const params = useParams();
   const router = useRouter();
 
   const origin = useOrigin();
 
+  const title = props.initialData ? "Editar" : "Crear";
+  const description = props.initialData
+    ? "Editar un Billboard"
+    : "Añadir un nuevo Billboard";
+  const toastMessage = props.initialData
+    ? "Se Edito el Billboard."
+    : "Se añadio el Billboard.";
+  const action = props.initialData ? "Guardar Cambios" : "Crear Billboard";
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<SettingsFormValues>({
-    defaultValues: {
-      name: props.initialData.name,
-    },
+  const form = useForm<BillboardFormValues>({
     resolver: zodResolver(formSchema),
+    defaultValues: props.initialData ?? {
+      label: "",
+      imageUrl: "",
+    },
   });
 
-  const onSubmit = async (data: SettingsFormValues) => {
+  const onSubmit = async (data: BillboardFormValues) => {
     try {
       setLoading(true);
       await axios.patch(`/api/stores/${params.storeID}`, data);
@@ -65,12 +76,14 @@ function SettingsForm(props: Readonly<SettingsFormProps>) {
       router.push("/");
       toast.success("Tienda eliminada");
     } catch (error) {
-      toast.error("Verifica que hayas eliminado todos los productos y las categorias primero");
+      toast.error(
+        "Verifica que hayas eliminado todos los productos y las categorias primero"
+      );
     } finally {
       setLoading(false);
       setOpen(false);
     }
-  }
+  };
 
   return (
     <>
@@ -83,35 +96,37 @@ function SettingsForm(props: Readonly<SettingsFormProps>) {
         loading={loading}
       />
       <div className="flex items-center justify-between">
-        <Heading title="Settings" description="desc" />
-        <Button
-          variant={"destructive"}
-          size={"sm"}
-          onClick={() => {
-            setOpen(true);
-          }}
-          disabled={loading}
-        >
-          <Trash className="h-4 w-4" />
-        </Button>
+        <Heading title={title} description={description} />
+        {props.initialData && (
+          <Button
+            variant={"destructive"}
+            size={"sm"}
+            onClick={() => {
+              setOpen(true);
+            }}
+            disabled={loading}
+          >
+            <Trash className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       <Separator />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
+          className="space-y-8 w-full mx-4"
         >
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="name"
+              name="label"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Label</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Nombre de la tienda"
+                      placeholder="Billboard"
                       {...field}
                     />
                   </FormControl>
@@ -120,14 +135,18 @@ function SettingsForm(props: Readonly<SettingsFormProps>) {
             />
           </div>
           <Button type="submit" disabled={loading} className="ml-auto">
-            Guardar
+            {action}
           </Button>
         </form>
       </Form>
       <Separator />
-      <ApiAlert title="Test" description={`${origin}/api/${params.storeID}`} variant="admin" />
+      <ApiAlert
+        title="Test"
+        description={`${origin}/api/${params.storeID}`}
+        variant="admin"
+      />
     </>
   );
 }
 
-export default SettingsForm;
+export default BillboardForm;
