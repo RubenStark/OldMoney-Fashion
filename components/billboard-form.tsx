@@ -17,6 +17,7 @@ import { useParams, useRouter } from "next/navigation";
 import AlertModal from "./modals/alert-modal";
 import { ApiAlert } from "./ui/api-alert";
 import { useOrigin } from "@/hooks/use-origin";
+import ImageUpload from "./ui/image-upload";
 
 interface BillboardFormProps {
   initialData: Billboard | null;
@@ -58,11 +59,16 @@ function BillboardForm(props: BillboardFormProps) {
   const onSubmit = async (data: BillboardFormValues) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/stores/${params.storeID}`, data);
+      if (props.initialData) {
+        await axios.patch(`/api/${params.storeID}/billboards/${params.billboardID}`, data);
+      } else {
+        await axios.post(`/api/${params.storeID}/billboards`, data);
+      }
       router.refresh();
-      toast.success("Tienda actualizada");
-    } catch (error) {
-      toast.error("Error al actualizar la tienda");
+      router.push(`/${params.storeId}/billboards`);
+      toast.success(toastMessage);
+    } catch (error: any) {
+      toast.error('Something went wrong.');
     } finally {
       setLoading(false);
     }
@@ -71,19 +77,17 @@ function BillboardForm(props: BillboardFormProps) {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/stores/${params.storeID}`);
+      await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`);
       router.refresh();
-      router.push("/");
-      toast.success("Tienda eliminada");
-    } catch (error) {
-      toast.error(
-        "Verifica que hayas eliminado todos los productos y las categorias primero"
-      );
+      router.push(`/${params.storeId}/billboards`);
+      toast.success('Billboard deleted.');
+    } catch (error: any) {
+      toast.error('Make sure you removed all categories using this billboard first.');
     } finally {
       setLoading(false);
       setOpen(false);
     }
-  };
+  }
 
   return (
     <>
@@ -116,6 +120,27 @@ function BillboardForm(props: BillboardFormProps) {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full mx-4"
         >
+          <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Background Image</FormLabel>
+                <FormControl>
+                  <ImageUpload
+                    value={field.value ? [field.value] : []}
+                    disabled={loading}
+                    onChange={(url) => {
+                      field.onChange(url);
+                    }}
+                    onRemove={() => {
+                      field.onChange("");
+                    }}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
