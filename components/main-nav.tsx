@@ -23,8 +23,13 @@ function MainNav({
       active: pathname === `/${params.storeID}/billboards`,
     },
     {
+      href: `/${params.storeID}/categories`,
+      label: "Categorias",
+      active: pathname === `/${params.storeID}/categories`,
+    },
+    {
       href: `/${params.storeID}/settings`,
-      label: "Settings",
+      label: "Ajustes",
       active: pathname === `/${params.storeID}/settings`,
     },
   ];

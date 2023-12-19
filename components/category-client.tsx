@@ -5,26 +5,27 @@ import { Button } from "./ui/button";
 import { Heading } from "./ui/heading";
 import { Separator } from "./ui/separator";
 import { useParams, useRouter } from "next/navigation";
-import { BillboardColumn, columns } from "./billboard/columns";
-import { DataTable } from "./billboard/data-table";
+import { columns } from "./category/columns";
+import { DataTable } from "./category/data-table";
 import ApiList from "./ui/api-list";
+import { CategoryColumn } from "./category/columns";
 
-interface BillboardClientProps {
-  data: BillboardColumn[];
+interface CategoryClientProps {
+  data: CategoryColumn[];
 }
 
-function BillboardClient({ data }: BillboardClientProps) {
+function CategoryClient({ data }: CategoryClientProps) {
   const router = useRouter();
   const params = useParams();
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Billboards (${data.length})`}
-          description="Maneja los Billboards de tu tienda"
+          title={`Categorias (${data.length})`}
+          description="Maneja los categorias de tu tienda"
         />
         <Button
-          onClick={() => router.push(`/${params.storeID}/billboards/new`)}
+          onClick={() => router.push(`/${params.storeID}/categories/new`)}
         >
           <Plus className="h-4 w-4" />
         </Button>
@@ -33,12 +34,12 @@ function BillboardClient({ data }: BillboardClientProps) {
       <DataTable columns={columns} data={data} searchKey="label" />
       <Heading
         title="API"
-        description="API para obtener los datos de los billboards"
+        description="API para obtener los datos de los categories"
       />
       <Separator />
-      <ApiList entityIdName="billboardID" entityName="billboards"/>
+      <ApiList entityIdName="categoryID" entityName="categories" />
     </>
   );
 }
 
-export default BillboardClient;
+export default CategoryClient;

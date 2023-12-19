@@ -65,7 +65,7 @@ function BillboardForm(props: BillboardFormProps) {
         await axios.post(`/api/${params.storeID}/billboards`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/billboards`);
+      router.push(`/${params.storeID}/billboards`);
       toast.success(toastMessage);
     } catch (error: any) {
       toast.error('Something went wrong.');
@@ -164,7 +164,6 @@ function BillboardForm(props: BillboardFormProps) {
           </Button>
         </form>
       </Form>
-      <Separator />
       <ApiAlert
         title="Test"
         description={`${origin}/api/${params.storeID}`}
