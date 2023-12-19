@@ -5,16 +5,16 @@ import prismadb from "@/lib/prismadb";
 
 export async function GET(
   req: Request,
-  { params }: { params: { billboardId: string } }
+  { params }: { params: { billboardID: string } }
 ) {
   try {
-    if (!params.billboardId) {
+    if (!params.billboardID) {
       return new NextResponse("Billboard id is required", { status: 400 });
     }
 
     const billboard = await prismadb.billboard.findUnique({
       where: {
-        id: params.billboardId
+        id: params.billboardID
       }
     });
   
@@ -27,7 +27,7 @@ export async function GET(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { billboardId: string, storeID: string } }
+  { params }: { params: { billboardID: string, storeID: string } }
 ) {
   try {
     const { userId } = auth();
@@ -36,7 +36,7 @@ export async function DELETE(
       return new NextResponse("Unauthenticated", { status: 403 });
     }
 
-    if (!params.billboardId) {
+    if (!params.billboardID) {
       return new NextResponse("Billboard id is required", { status: 400 });
     }
 
@@ -53,7 +53,7 @@ export async function DELETE(
 
     const billboard = await prismadb.billboard.delete({
       where: {
-        id: params.billboardId,
+        id: params.billboardID,
       }
     });
   
@@ -67,7 +67,7 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { billboardId: string, storeID: string } }
+  { params }: { params: { billboardID: string, storeID: string } }
 ) {
   try {   
     const { userId } = auth();
@@ -88,7 +88,7 @@ export async function PATCH(
       return new NextResponse("Image URL is required", { status: 400 });
     }
 
-    if (!params.billboardId) {
+    if (!params.billboardID) {
       return new NextResponse("Billboard id is required", { status: 400 });
     }
 
@@ -105,7 +105,7 @@ export async function PATCH(
 
     const billboard = await prismadb.billboard.update({
       where: {
-        id: params.billboardId,
+        id: params.billboardID,
       },
       data: {
         label,
