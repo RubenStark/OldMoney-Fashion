@@ -35,6 +35,7 @@ const formSchema = z.object({
   categoryId: z.string().min(1),
   colorId: z.string().min(1),
   sizeId: z.string().min(1),
+  isMan: z.boolean().default(false),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional()
 });
@@ -77,6 +78,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     categoryId: '',
     colorId: '',
     sizeId: '',
+    isMan: false,
     isFeatured: false,
     isArchived: false,
   }
@@ -251,6 +253,29 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isMan"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      // @ts-ignore
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Es para hombre
+                    </FormLabel>
+                    <FormDescription>
+                      Selecciona el genero al que va dirigido el producto
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
