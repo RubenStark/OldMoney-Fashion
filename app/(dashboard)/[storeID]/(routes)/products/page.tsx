@@ -30,7 +30,7 @@ const ProductsPage = async ({
     name: item.name,
     isFeatured: item.isFeatured,
     isArchived: item.isArchived,
-    isMan: item.isMan,
+    isMan: item.isMan ? 'Hombre' : 'Mujer',
     price: formatter.format(item.price.toNumber()),
     category: item.category.name,
     size: item.size.name,

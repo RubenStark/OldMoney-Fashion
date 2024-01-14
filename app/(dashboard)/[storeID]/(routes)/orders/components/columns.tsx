@@ -1,15 +1,17 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
+import { CellAction } from "./cell-action";
 
 export type OrderColumn = {
   id: string;
   phone: string;
   address: string;
-  isPaid: boolean;
+  isPaid: string;
   totalPrice: string;
   products: string;
   createdAt: string;
+  isShipped: string;
 }
 
 export const columns: ColumnDef<OrderColumn>[] = [
@@ -32,5 +34,13 @@ export const columns: ColumnDef<OrderColumn>[] = [
   {
     accessorKey: "isPaid",
     header: "Paid",
+  },
+  {
+    accessorKey: "isShipped",
+    header: "Enviada",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <CellAction data={row.original} />
   },
 ];
