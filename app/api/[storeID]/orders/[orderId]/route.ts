@@ -27,19 +27,6 @@ export async function PATCH(
       },
     });
 
-    const productIds = order.orderItems.map((orderItem) => orderItem.productId);
-
-    await prismadb.product.updateMany({
-      where: {
-        id: {
-          in: [...productIds],
-        },
-      },
-      data: {
-        isArchived: true,
-      },
-    });
-
     return new NextResponse(null, { status: 200 });
   } catch (error) {
     console.log("[ORDERS_PATCH]", error);
