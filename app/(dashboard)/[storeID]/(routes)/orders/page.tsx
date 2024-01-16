@@ -38,7 +38,8 @@ const OrdersPage = async ({
     }, 0)),
     isPaid: item.isPaid ? 'Si' : 'No',
     createdAt: format(item.createdAt, 'MMMM do, yyyy'),
-    isShipped: item.isShipped ? 'Si' : 'No'
+    isShipped: item.isShipped ? 'Si' : 'No',
+    ownerId: item.ownerId
   }));
 
   return (
