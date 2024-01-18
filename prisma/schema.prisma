@@ -88,6 +88,7 @@ model Order {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   isShipped  Boolean     @default(false)
+  shippedCode String     @default("")
 
   @@index([storeId])
 }
