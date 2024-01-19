@@ -60,35 +60,33 @@ model Product {
   price      Decimal
   isFeatured Boolean     @default(false)
   isArchived Boolean     @default(false)
-  sizeId     String // Foreign Key to Size
-  size       Size        @relation(fields: [sizeId], references: [id])
+  sizes      Size[] // Cambio a relación de muchos a muchos
   colorId    String // Foreign Key to Color
   color      Color       @relation(fields: [colorId], references: [id])
-  images     Image[] // Relation to Image model
-  orderItems OrderItem[] // Relation to Order model
+  images     Image[] // Relación de uno a muchos
+  orderItems OrderItem[] // Relación de uno a muchos
   isMan      Boolean     @default(true)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 
   @@index([storeId])
   @@index([categoryId])
-  @@index([sizeId])
   @@index([colorId])
 }
 
 model Order {
-  id         String      @id @default(uuid())
-  ownerId    String      @default("")
-  storeId    String // Foreign Key to Store
-  store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems OrderItem[] // Relation to OrderItem model
-  isPaid     Boolean     @default(false)
-  phone      String      @default("")
-  address    String      @default("")
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  isShipped  Boolean     @default(false)
-  shippedCode String     @default("")
+  id          String      @id @default(uuid())
+  ownerId     String      @default("")
+  storeId     String // Foreign Key to Store
+  store       Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems  OrderItem[] // Relation to OrderItem model
+  isPaid      Boolean     @default(false)
+  phone       String      @default("")
+  address     String      @default("")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  isShipped   Boolean     @default(false)
+  shippedCode String      @default("")
 
   @@index([storeId])
 }
@@ -106,14 +104,15 @@ model OrderItem {
 }
 
 model Size {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   storeId   String // Foreign Key to Store
-  store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
+  store     Store    @relation("StoreToSize", fields: [storeId], references: [id])
   name      String
   value     String
-  products  Product[] // Relation to Product model
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  productId String? // Foreign Key to Product
+  product   Product? @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([storeId])
 }
