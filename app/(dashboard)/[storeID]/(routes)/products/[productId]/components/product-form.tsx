@@ -83,6 +83,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const defaultValues = initialData
     ? {
         ...initialData,
+        sizes: productSizes.map((size) => size.name),
         price: parseFloat(String(initialData?.price)),
       }
     : {
@@ -94,7 +95,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         isMan: false,
         isFeatured: false,
         isArchived: false,
-        sizes: [],
       };
 
   const form = useForm<ProductFormValues>({

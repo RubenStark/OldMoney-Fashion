@@ -15,33 +15,31 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { toast } from "react-hot-toast";
-import { Category, Color, Image, Product, Size } from "@prisma/client";
 
 const items = [
   {
     id: "recents",
-    name: "Recents",
+    label: "Recents",
   },
   {
     id: "home",
-    name: "Home",
+    label: "Home",
   },
   {
     id: "applications",
-    name: "Applications",
+    label: "Applications",
   },
   {
     id: "desktop",
-    name: "Desktop",
+    label: "Desktop",
   },
   {
     id: "downloads",
-    name: "Downloads",
+    label: "Downloads",
   },
   {
     id: "documents",
-    name: "Documents",
+    label: "Documents",
   },
 ] as const;
 
@@ -51,35 +49,16 @@ const FormSchema = z.object({
   }),
 });
 
-type ProductFormValues = z.infer<typeof FormSchema>;
-
-interface ProductFormProps {
-  initialData:
-    | (Product & {
-        images: Image[];
-      })
-    | null;
-  categories: Category[];
-  colors: Color[];
-  sizes: Size[];
-}
-
-export const ProductForm: React.FC<ProductFormProps> = ({
-    initialData,
-    categories,
-    sizes,
-    colors,
-  }) => {
-
+export default function CheckboxReactHookFormMultiple() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      items: [],
+      items: ["recents", "home"],
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast.success(JSON.stringify(data, null, 2));
+    console.log(data);
   }
 
   return (
@@ -122,7 +101,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          {item.name}
+                          {item.label}
                         </FormLabel>
                       </FormItem>
                     );
@@ -138,5 +117,3 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     </Form>
   );
 }
-
-export default ProductForm;
