@@ -19,7 +19,7 @@ export async function GET(
       include: {
         images: true,
         category: true,
-        size: true,
+        sizes: true,
         color: true,
       }
     });
@@ -80,7 +80,7 @@ export async function PATCH(
 
     const body = await req.json();
 
-    const { name, price, categoryId, images, colorId, sizeId, isFeatured, isArchived, isMan } = body;
+    const { name, price, categoryId, images, colorId, sizes, isFeatured, isArchived, isMan } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -110,7 +110,7 @@ export async function PATCH(
       return new NextResponse("Color id is required", { status: 400 });
     }
 
-    if (!sizeId) {
+    if (!sizes) {
       return new NextResponse("Size id is required", { status: 400 });
     }
 
@@ -134,9 +134,11 @@ export async function PATCH(
         price,
         categoryId,
         colorId,
-        sizeId,
         isMan,
         images: {
+          deleteMany: {},
+        },
+        sizes: {
           deleteMany: {},
         },
         isFeatured,
@@ -153,6 +155,17 @@ export async function PATCH(
           createMany: {
             data: [
               ...images.map((image: { url: string }) => image),
+            ],
+          },
+        },
+        sizes: {
+          createMany: {
+            data: [
+              ...sizes.map((size: string[]) => ({
+                storeId: params.storeId,
+                name: size,
+                value: size,
+              })),
             ],
           },
         },

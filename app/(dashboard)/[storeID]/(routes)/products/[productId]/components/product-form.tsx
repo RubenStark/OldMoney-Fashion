@@ -272,7 +272,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue
-                          defaultValue={field.value}
+                          defaultValue={field.value}	
                           placeholder="Select a color"
                         />
                       </SelectTrigger>
