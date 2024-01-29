@@ -28,6 +28,8 @@ const OrdersPage = async ({
     }
   });
 
+  console.log(orders[0].orderItems[0].size);
+
   const formattedOrders: OrderColumn[] = orders.map((item) => ({
     id: item.id,
     phone: item.phone,

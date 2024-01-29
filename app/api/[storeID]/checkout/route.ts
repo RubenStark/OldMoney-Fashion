@@ -18,7 +18,7 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  const { productIds, ownerId } = await req.json();
+  const { productIds, ownerId, sizes } = await req.json();
 
   if (!productIds || productIds.length === 0) {
     return new NextResponse("Product ids are required", { status: 400 });
@@ -54,6 +54,7 @@ export async function POST(
       ownerId: ownerId,
       orderItems: {
         create: productIds.map((productId: string) => ({
+          size: sizes[productId.indexOf(productId)],
           product: {
             connect: {
               id: productId,
@@ -64,7 +65,7 @@ export async function POST(
     },
   });
 
-  console.log(order.ownerId);
+  // console.log(order.ownerId);
 
   const session = await stripe.checkout.sessions.create({
     line_items,

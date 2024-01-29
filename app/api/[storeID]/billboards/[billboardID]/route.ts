@@ -17,7 +17,7 @@ export async function GET(
         id: params.billboardId
       }
     });
-  
+    console.log('[BILLBOARD_GET]', billboard);
     return NextResponse.json(billboard);
   } catch (error) {
     console.log('[BILLBOARD_GET]', error);
