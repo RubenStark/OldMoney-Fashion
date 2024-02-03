@@ -15,12 +15,17 @@ export async function PATCH(
       return new NextResponse("Unauthenticated", { status: 403 });
     }
 
+    const body = await req.json();
+
+    const { code } = body;
+
     const order = await prismadb.order.update({
       where: {
         id: params.orderId,
       },
       data: {
         isShipped: true,
+        shippedCode: code,
       },
       include: {
         orderItems: true,

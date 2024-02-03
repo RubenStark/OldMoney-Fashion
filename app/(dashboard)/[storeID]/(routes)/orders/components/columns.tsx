@@ -12,7 +12,7 @@ export type OrderColumn = {
   products: string;
   createdAt: string;
   isShipped: string;
-  ownerId: string;
+  // ownerId: string;
 }
 
 export const columns: ColumnDef<OrderColumn>[] = [
@@ -40,10 +40,10 @@ export const columns: ColumnDef<OrderColumn>[] = [
     accessorKey: "isShipped",
     header: "Enviada",
   },
-  {
-    accessorKey: "ownerId",
-    header: "Owner",
-  },
+  // {
+  //   accessorKey: "ownerId",
+  //   header: "Owner",
+  // },
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />
