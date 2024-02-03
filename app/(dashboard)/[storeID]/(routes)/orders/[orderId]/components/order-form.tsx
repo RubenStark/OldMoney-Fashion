@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Trash } from "lucide-react";
-import { Order, OrderItem } from "@prisma/client";
+import { Order, Product } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 
 import { Input } from "@/components/ui/input";
@@ -162,7 +162,19 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   );
 };
 
-function OrderCard({ data }: { data: OrderItem }) {
+type OrderItem = {
+  id: string;
+  orderId: string;
+  productId: string;
+  size: string;
+  product: {
+    images: { url: string }[];
+    name: string;
+    color: { name: string };
+  };
+};
+
+function OrderCard({ data }: { data: OrderItem}) {
   return (
     <li className="flex py-6 border-b">
       <div className="relative h-24 w-24 rounded-md overflow-hidden sm:h-48 sm:w-48">
