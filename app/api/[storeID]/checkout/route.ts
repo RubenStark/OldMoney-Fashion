@@ -19,7 +19,8 @@ export async function POST(
   { params }: { params: { storeId: string } }
 ) {
 
-  const url = new URL(req.url);
+  const fullUrl = new URL(req.url);
+  const url = fullUrl.origin
  
   const { productIds, ownerId, sizes } = await req.json();
 
