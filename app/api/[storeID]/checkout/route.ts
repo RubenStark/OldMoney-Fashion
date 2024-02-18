@@ -18,6 +18,9 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
+
+  const url = new URL(req.url);
+ 
   const { productIds, ownerId, sizes } = await req.json();
 
   if (!productIds || productIds.length === 0) {
@@ -66,6 +69,7 @@ export async function POST(
   });
 
   // console.log(order.ownerId);
+  // TODO - obtener la url de la tienda
 
   const session = await stripe.checkout.sessions.create({
     line_items,
@@ -74,8 +78,9 @@ export async function POST(
     phone_number_collection: {
       enabled: true,
     },
-    success_url: `${process.env.FRONTEND_STORE_URL}/cart?success=1`,
-    cancel_url: `${process.env.FRONTEND_STORE_URL}/cart?canceled=1`,
+    // success_url: `${process.env.FRONTEND_STORE_URL}/cart?success=1`,
+    success_url: `${url}/cart?success=1`,
+    cancel_url: `${url}/cart?canceled=1`,
     metadata: {
       orderId: order.id,
     },
